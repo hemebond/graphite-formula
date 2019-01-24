@@ -1,0 +1,6 @@
+{%- for section_name, section_data in graphite.carbon.conf.items() %}
+[{{ section_name }}]
+{%-   for k, v in section_data.items() %}
+{{ k }} = {{ v }}
+{%-   endfor %}
+{%- endfor %}

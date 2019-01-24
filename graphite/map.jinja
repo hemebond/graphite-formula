@@ -1,0 +1,34 @@
+{%- import_yaml "graphite/defaults.yml" as graphite_defaults %}
+
+{%- set graphite = salt.grains.filter_by({
+	'Debian': {
+		'paths': {
+			'conf': '/srv/graphite/conf',
+			'storage': '/srv/graphite/storage',
+			'pythonpath': '/srv/graphite/lib/:/srv/graphite/webapp/',
+		},
+		'database': {
+			'type': 'sqlite3',
+			'host': '',
+			'port': '',
+			'name': '/srv/graphite/storage/graphite.db',
+			'user': '',
+			'password': '',
+		},
+		'carbon': {
+			'paths': {
+				'logs': '/var/log/carbon',
+				'pid': '/var/run/carbon',
+				'servicename': 'carbon-cache',
+				'servicefile': '/etc/systemd/system/carbon-cache.service',
+			},
+			'conf': {
+				'cache': {
+					'LOG_DIR': '/var/log/carbon/',
+					'PID_DIR': '/var/run/carbon'
+				}
+			}
+		}
+	},
+	'base': graphite_defaults
+}, base='base', merge=salt.pillar.get('graphite:lookup')) %}

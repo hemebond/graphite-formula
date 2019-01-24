@@ -1,0 +1,14 @@
+[Unit]
+Description=carbon-cache instance (graphite)
+
+[Service]
+User={{ graphite.user }}
+Group={{ graphite.group }}
+ExecStartPre=/bin/rm -f {{ graphite.carbon.paths.pid }}/carbon-cache.pid
+ExecStart={{ graphite.paths.root }}/bin/python {{ graphite.paths.root }}/bin/carbon-cache.py --pidfile={{ graphite.carbon.paths.pid }}/carbon-cache.pid start
+Type=forking
+PIDFile={{ graphite.carbon.paths.pid }}/carbon-cache.pid
+LimitNOFILE=128000
+
+[Install]
+WantedBy=multi-user.target
