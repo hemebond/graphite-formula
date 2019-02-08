@@ -4,20 +4,13 @@
   file.absent
 
 carbon_cache_service:
-  # file.managed:
-  #   - name: /etc/init.d/carbon-cache
-  #   - source: salt://graphite/carbon/files/carbon-cache.init.j2
-  #   - template: jinja
-  #   - mode: 755
-  #   - context:
-  #       graphite: {{ graphite }}
   file.managed:
     - name: {{ graphite.carbon.paths.servicefile }}
     - source: salt://graphite/carbon/files/carbon-cache.service.j2
     - template: jinja
     - mode: 755
     - context:
-        graphite: {{ graphite }}
+        graphite: {{ graphite | json }}
   module.run:
     - name: service.systemctl_reload
     - onchanges:
@@ -47,7 +40,7 @@ graphite_pkg_carbon:
     - source: salt://graphite/carbon/files/storage-schemas.conf
     - template: jinja
     - context:
-        graphite: {{ graphite }}
+        graphite: {{ graphite | json }}
 
 
 /srv/graphite/conf/storage-aggregation.conf:
@@ -60,7 +53,9 @@ graphite_pkg_carbon:
     - source: salt://graphite/carbon/files/carbon.conf.j2
     - template: jinja
     - context:
-        graphite: {{ graphite }}
+        graphite: {{ graphite | json }}
+    - watch_in:
+      - service: carbon-cache
 
 
 local-dirs:
