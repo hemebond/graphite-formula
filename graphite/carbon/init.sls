@@ -10,7 +10,7 @@ carbon_cache_service:
     - template: jinja
     - mode: 755
     - context:
-        graphite: {{ graphite | json }}
+        graphite: {{ graphite | tojson }}
   module.run:
     - name: service.systemctl_reload
     - onchanges:
@@ -40,7 +40,7 @@ graphite_pkg_carbon:
     - source: salt://graphite/carbon/files/storage-schemas.conf
     - template: jinja
     - context:
-        graphite: {{ graphite | json }}
+        graphite: {{ graphite | tojson }}
 
 
 /srv/graphite/conf/storage-aggregation.conf:
@@ -53,7 +53,7 @@ graphite_pkg_carbon:
     - source: salt://graphite/carbon/files/carbon.conf.j2
     - template: jinja
     - context:
-        graphite: {{ graphite | json }}
+        graphite: {{ graphite | tojson }}
     - watch_in:
       - service: carbon-cache
 
